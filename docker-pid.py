@@ -1,44 +1,62 @@
-import textwrap
-
 import docker 
+import click
 from tabulate import tabulate
 
-#  'Titles': ['USER',
-#   'PID',
-#   '%CPU',
-#   '%MEM',
-#   'VSZ',
-#   'RSS',
-#   'TTY',
-#   'STAT',
-#   'START',
-#   'TIME',
-#   'COMMAND']
+def truncate(text, width=15, placeholder='...'):
+    w = width-len(placeholder)
+    return (text[:w] + placeholder) if len(text) > width else text
 
-def truncate(string, width=15, placeholder='..'):
-    return textwrap.shorten(string, width, placeholder=placeholder)
-
-def docker_pid():
+HEADERS = [
+        'Container ID',
+        'Container Name',
+        'User',
+        'PID',
+        '%CPU',
+        '%Mem',
+        'VSZ',
+        'RSS',
+        'TTY',
+        'STAT',
+        'START',
+        'TIME',
+        'CMD']
+def docker_pids():
     client = docker.from_env()
     containers = client.containers.list()
+
     data = []
     for c in containers:
-        cid = str(c.attrs['Id'])
+        cid = c.attrs['Id']
         cname = c.attrs['Name']
         procs = c.top(ps_args="aux")
         for p in procs['Processes']:
-            del p[4:10]
-            p[4]=truncate(p[4])
-            p[4]=truncate(p[4])
+            #del p[4:10]
             p[1] = int(p[1])
             p[2] = float(p[2])
             p[3] = float(p[3])
-            cids = truncate(cid, width=12, placeholder='')
-            d = [cids, cname]+p
+            d = [cid, cname]+p
             data.append(d)
 
-    headers = ['container id', 'container name', 'user', 'pid', '%CPU', '%Mem', 'CMD']
-    print(tabulate(data, headers))
+    return data
+
+def modify_info(data):
+    ret = []
+    for r in data:
+        del r[6:12]
+        print(r)
+        r[0] = truncate(r[0], 16,'') # container ID
+        r[1] = truncate(r[1], 20) # container name
+        r[6] = truncate(r[6], 20) # CMD
+        ret.append(r)
+    return ret
+
+@click.command()
+def show_docker_pids():
+    data = docker_pids()
+
+    headers = ['Container ID', 'Container Name', 'User', 'PID', '%CPU', '%Mem', 'CMD']
+    data = modify_info(data)
+    click.echo(tabulate(data, headers))
 
 if __name__ == '__main__':
-    docker_pid()
+    show_docker_pids()
