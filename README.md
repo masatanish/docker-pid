@@ -6,7 +6,7 @@ Listing process IDs which run in all docker containers.
 
 - docker
 
-## Install Prepare
+## Install
 
 ```
 pip install docker-pid
