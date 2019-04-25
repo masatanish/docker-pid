@@ -1,25 +1,15 @@
 # Docker pid
 Listing process IDs which run in docker container.
 
-## Reqirements
-- Python > 3 
-  - not confirmed on python 2.x
-
-## Prepare
+## Install Prepare
 ```
 pip install -r requirements.txt
 ```
 
-### Run
+## Usage
 ```
-python docker-pid.py
+% docker-pid
 ```
-
-### ToDo
-- [ ] support command line options
-  - sort by PID, %CPU, %Mem, Container ID
-- [ ] run as command line tool
-- [ ] register to pypi as pip package
 
 ## LICENSE
 MIT (See [LICENSE.txt](/LICENSE.txt).)
