@@ -16,7 +16,10 @@ python docker-pid.py
 ```
 
 ### ToDo
-- [] support command line options
+- [ ] support command line options
   - sort by PID, %CPU, %Mem, Container ID
-- [] run as command line tool
-- [] register to pypi as pip package
+- [ ] run as command line tool
+- [ ] register to pypi as pip package
+
+## LICENSE
+MIT (See [LICENSE.txt](/LICENSE.txt).)
