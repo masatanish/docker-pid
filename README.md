@@ -1,9 +1,12 @@
 # Docker pid
-Listing process IDs which run in docker container.
+Listing process IDs which run in all docker containers.
+
+## Requirements
+- docker
 
 ## Install Prepare
 ```
-pip install -r requirements.txt
+pip install docker-pid
 ```
 
 ## Usage
